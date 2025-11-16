@@ -1,38 +1,40 @@
-let students = [
-        { name: "John Johnson", mark: 11 },
-        { name: "Joan Joanson", mark: 10 },
-        { name: "John Doe", mark: 8 },
-        { name: "Joan Doe", mark: 6 }
-    ];
+let students = {
+    "John Johnson": 11,
+    "Joan Joanson": 10,
+    "John Doe": 10,
+    "Joan Doe": 11,
+};
 
 function showStudents() {
-    let print = "<ul>";
-    students.forEach(s => {
-        print += `<li>${s.name}: ${s.mark}</li>`;
-    });
-    print += "</ul>";
-    document.getElementById("info").innerHTML = print;
+    let info = "";
+    for (let name in students) {
+        info += `${name}: ${students[name]}\n`;
+    }
+    document.getElementById("info").innerText = info || "List is empty";
 }
 
 function addStudent() {
-    const name = prompt("Enter students name та surname:");
-    const mark = +(prompt("Enter students mark:"));
+    let name = prompt("Enter students name та surname:");
+    if (!name) return;
 
-    if (name && !isNaN(mark)) {
-        students.push({ name, mark });
-        alert("Student added");
-    } else {
-        alert("Invalid input");
+    let mark = prompt("Введіть середній бал:");
+    mark = Number(mark);
+
+    if (isNaN(mark) || mark < 0 || mark > 12) {
+        alert("Invalid number");
+        return;
     }
+
+    students[name] = mark;
+    alert("Student added");
 }
 
 function deleteStudent() {
-    const name = prompt("Enter students name та surname:");
+    let name = prompt("Enter students name та surname:");
+    if (!name) return;
 
-    const index = students.findIndex(s => s.name.toLowerCase() == name.toLowerCase());
-
-    if (index !== -1) {
-        students.splice(index, 1);
+    if (students[name] !== undefined) {
+        delete students[name];
         alert("Student deleted");
     } else {
         alert("Student not found");
@@ -40,11 +42,19 @@ function deleteStudent() {
 }
 
 function averageMark() {
-    if (students.length == 0) {
-        alert("List is empty");
+    let sum = 0;
+    let count = 0;
+
+    for (let name in students) {
+        sum += students[name];
+        count++;
+    }
+
+    if (count == 0) {
+        document.getElementById("info").innerText = "List is empty";
         return;
     }
 
-    const avg = students.reduce((sum, s) => sum + s.mark, 0) / students.length;
-    alert("Average group mark: " + avg.toFixed(2));
+    let avg = (sum / count).toFixed(2);
+    document.getElementById("info").innerText = `Average mark: ${avg}`;
 }
