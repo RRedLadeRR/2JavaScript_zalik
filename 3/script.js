@@ -12,7 +12,7 @@ const arr = [
 const newArr = [];
 
 arr.forEach((element, index) => {
-    if (index % 2 === 0) {
+    if (index % 2 == 0) {
         newArr.push(element);
     }
 });
